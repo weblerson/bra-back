@@ -15,4 +15,5 @@ class PremensUserAdmin(model_admin.UserAdmin):
 
     fieldsets = model_admin.UserAdmin.fieldsets + (
         ('Informações Residenciais', {'fields': ('cep',)}),
+        ('Informações Pessoais Extras', {'fields': ('cpf',)})
     )

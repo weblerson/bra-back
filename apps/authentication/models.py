@@ -39,6 +39,7 @@ class PremensUser(AbstractUser):
     email: models.EmailField = models.EmailField(unique=True)
 
     cep: models.CharField = models.CharField(max_length=8, blank=False)
+    cpf: models.CharField = models.CharField(max_length=11, unique=True)
 
     USERNAME_FIELD: str = 'email'
     EMAIL_FIELD: str = 'email'
