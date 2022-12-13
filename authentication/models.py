@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager as BaseUserManager
 
+from .validators import validate_digits, validate_cpf_length, validate_cep_length, validate_password
+
 
 class UserManager(BaseUserManager):
 
@@ -38,8 +40,22 @@ class PremensUser(AbstractUser):
     username: models.CharField = models.CharField(max_length=150, blank=True, default='_')
     email: models.EmailField = models.EmailField(unique=True)
 
-    cep: models.CharField = models.CharField(max_length=8, blank=False)
-    cpf: models.CharField = models.CharField(max_length=11, unique=True)
+    password = models.CharField(("%s" % "password",), max_length=128, validators=[validate_password])
+
+    cep: models.CharField = models.CharField(
+        max_length=8,
+        blank=False,
+        validators=[
+            validate_digits,
+            validate_cep_length
+        ])
+    cpf: models.CharField = models.CharField(
+        max_length=11,
+        unique=True,
+        validators=[
+            validate_digits,
+            validate_cpf_length
+        ])
 
     USERNAME_FIELD: str = 'email'
     EMAIL_FIELD: str = 'email'

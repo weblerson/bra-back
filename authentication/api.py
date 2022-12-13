@@ -7,7 +7,7 @@ from ninja import Router
 from .schemas import User
 
 from .models import PremensUser
-from .forms import ValidationForm
+from .forms import PremensUserForm
 
 auth_router: Router = Router()
 
@@ -22,7 +22,7 @@ def register(request: HttpRequest, user: User):
             'errors': ''
         }
 
-    form: ValidationForm = ValidationForm(user.dict())
+    form: PremensUserForm = PremensUserForm(user.dict())
     if not form.is_valid():
         errors = form.errors
 
@@ -47,13 +47,30 @@ def register(request: HttpRequest, user: User):
                 'errors': ''
             }
 
-        premens_user: PremensUser = PremensUser(
-            first_name=user.first_name,
-            last_name=user.last_name,
-            cpf=user.cpf,
-            cep=user.cep,
-            email=user.email
-        )
+        premens_user: PremensUser
+
+        if not user.staff:
+            premens_user = PremensUser.objects.create_user(
+                first_name=user.first_name,
+                last_name=user.last_name,
+                cpf=user.cpf,
+                cep=user.cep,
+                email=user.email,
+                password=user.password,
+                is_active=False
+            )
+
+        else:
+            premens_user = PremensUser.objects.create_user(
+                first_name=user.first_name,
+                last_name=user.last_name,
+                cpf=user.cpf,
+                cep=user.cep,
+                email=user.email,
+                password=user.password,
+                is_active=False,
+                is_staff=True
+            )
 
         premens_user.save()
 

@@ -7,3 +7,5 @@ class User(Schema):
     cpf: str
     cep: str
     email: str
+    password: str
+    staff: bool
