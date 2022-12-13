@@ -18,8 +18,7 @@ def register(request: HttpRequest, user: User):
     if not hash_pass == config('BRAAuth', cast=str):
         return {
             'success': False,
-            'body': 'Senha de acesso incorreta!',
-            'errors': ''
+            'body': 'Senha de acesso incorreta!'
         }
 
     form: PremensUserForm = PremensUserForm(user.dict())
@@ -28,23 +27,20 @@ def register(request: HttpRequest, user: User):
 
         return {
             'success': False,
-            'body': 'Preencha as informações corretamente!',
-            'errors': errors
+            'body': errors
         }
 
     try:
         if PremensUser.objects.filter(cpf=user.cpf):
             return {
                 'success': False,
-                'body': 'Já existe um usuário com esse CPF cadastrado.',
-                'errors': PremensUser.objects.get(cpf=user.cpf).email
+                'body': 'Já existe um usuário com esse CPF cadastrado.'
             }
 
         if PremensUser.objects.filter(email=user.email):
             return {
                 'success': False,
-                'body': 'Já existe um usuário cadastrado com esse e-mail.',
-                'errors': ''
+                'body': 'Já existe um usuário cadastrado com esse e-mail.'
             }
 
         premens_user: PremensUser
@@ -76,13 +72,11 @@ def register(request: HttpRequest, user: User):
 
         return {
             'success': True,
-            'body': 'Usuário cadastrado com sucesso!',
-            'errors': ''
+            'body': 'Usuário cadastrado com sucesso!'
         }
 
     except Exception as e:
         return {
             'success': False,
-            'body': e,
-            'errors': ''
+            'body': e
         }
