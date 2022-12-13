@@ -11,6 +11,8 @@ class PremensUserAdmin(model_admin.UserAdmin):
     add_form = UserCreationForm
     model = PremensUser
 
+    list_display = ("email", "first_name", "last_name", "is_staff")
+
     fieldsets = model_admin.UserAdmin.fieldsets + (
         ('Informações Residenciais', {'fields': ('cep',)}),
     )
