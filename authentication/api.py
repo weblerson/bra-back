@@ -22,7 +22,7 @@ def register(request: HttpRequest, user: User):
             'errors': ''
         }
 
-    form: ValidationForm = ValidationForm(request.POST)
+    form: ValidationForm = ValidationForm(user.dict())
     if not form.is_valid():
         errors = form.errors
 
@@ -37,13 +37,13 @@ def register(request: HttpRequest, user: User):
             return {
                 'success': False,
                 'body': 'Já existe um usuário com esse CPF cadastrado.',
-                'errors': ''
+                'errors': PremensUser.objects.get(cpf=user.cpf).email
             }
 
         if PremensUser.objects.filter(email=user.email):
             return {
                 'success': False,
-                'body': 'Já existe um usu[ario cadastrado com esse e-mail.',
+                'body': 'Já existe um usuário cadastrado com esse e-mail.',
                 'errors': ''
             }
 
