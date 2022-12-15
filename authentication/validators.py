@@ -22,12 +22,3 @@ def validate_cep_length(value: str) -> None:
         raise ValidationError(
             'CEP length is lower than 8.'
         )
-
-
-def validate_password(value: str) -> None:
-    regex: re.Pattern = re.compile(r'(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%<^&*?])(?=.*[0-9])[a-zA-Z0-9!@#$%<^&*?]{8,}')
-    if not regex.match(value):
-        raise ValidationError(
-            'Enter a strong password! A strong password is made up of 8 digits and must contain at least 1 number, '
-            'an uppercase letter, a lowercase letter and a symbol. '
-        )

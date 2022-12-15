@@ -1,3 +1,5 @@
+import re
+
 from django.core.mail import EmailMultiAlternatives, BadHeaderError
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
@@ -24,3 +26,11 @@ class Utils:
             return
 
         return
+
+    @staticmethod
+    def validate_password(value: str) -> bool:
+        regex: re.Pattern = re.compile(r'(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%<^&*?])(?=.*[0-9])[a-zA-Z0-9!@#$%<^&*?]{8,}')
+        if not regex.match(value):
+            return False
+
+        return True

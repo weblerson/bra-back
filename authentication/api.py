@@ -6,6 +6,8 @@ from hashlib import sha256
 from ninja import Router
 from .schemas import User
 
+from utils import Utils
+
 from .models import PremensUser
 from .forms import PremensUserForm
 
@@ -14,6 +16,13 @@ auth_router: Router = Router()
 
 @auth_router.post('')
 def register(request: HttpRequest, user: User):
+    if not Utils.validate_password(user.password):
+        return {
+            'success': False,
+            'body': 'Enter a strong password! A strong password is made up of 8 digits and must contain at least 1 '
+                    'number, an uppercase letter, a lowercase letter and a symbol. '
+        }
+
     hash_pass = sha256(request.headers.get('BRAAuth').encode()).hexdigest()
     if not hash_pass == config('BRAAuth', cast=str):
         return {

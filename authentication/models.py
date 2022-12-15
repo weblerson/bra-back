@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager as BaseUserManager
 
-from .validators import validate_digits, validate_cpf_length, validate_cep_length, validate_password
+from .validators import validate_digits, validate_cpf_length, validate_cep_length
 
 
 class UserManager(BaseUserManager):
@@ -40,16 +40,14 @@ class PremensUser(AbstractUser):
     username: str = models.CharField(max_length=150, blank=True, default='_')
     email: str = models.EmailField(unique=True)
 
-    password = models.CharField(("%s" % "password",), max_length=128, validators=[validate_password])
-
-    cep: models.CharField = models.CharField(
+    cep = models.CharField(
         max_length=8,
         blank=False,
         validators=[
             validate_digits,
             validate_cep_length
         ])
-    cpf: models.CharField = models.CharField(
+    cpf = models.CharField(
         max_length=11,
         unique=True,
         validators=[
@@ -69,8 +67,8 @@ class PremensUser(AbstractUser):
 
 
 class PremensActivation(models.Model):
-    user: PremensUser = models.ForeignKey(PremensUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(PremensUser, on_delete=models.CASCADE)
     token: str = models.CharField(max_length=64, blank=False)
 
     def __str__(self) -> str:
-        return "%s's token" % (self.user.get_full_name(),)
+        return "%s's token" % (self.user,)
