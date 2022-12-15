@@ -37,8 +37,8 @@ class UserManager(BaseUserManager):
 
 class PremensUser(AbstractUser):
 
-    username: models.CharField = models.CharField(max_length=150, blank=True, default='_')
-    email: models.EmailField = models.EmailField(unique=True)
+    username: str = models.CharField(max_length=150, blank=True, default='_')
+    email: str = models.EmailField(unique=True)
 
     password = models.CharField(("%s" % "password",), max_length=128, validators=[validate_password])
 
@@ -70,7 +70,7 @@ class PremensUser(AbstractUser):
 
 class PremensActivation(models.Model):
     user: PremensUser = models.ForeignKey(PremensUser, on_delete=models.CASCADE)
-    token: models.CharField = models.CharField(max_length=64, blank=False)
+    token: str = models.CharField(max_length=64, blank=False)
 
     def __str__(self) -> str:
         return "%s's token" % (self.user.get_full_name(),)

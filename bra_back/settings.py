@@ -143,6 +143,7 @@ AUTHENTICATION_BACKENDS = ('authentication.backends.CustomBackend',)
 # E-mails
 
 REGISTER_TEMPLATE_PATH: str = os.path.join(BASE_DIR, 'authentication/templates/emails/register.html')
+UPDATE_TEMPLATE_PATH: str = os.path.join(BASE_DIR, 'authentication/templates/emails/update.html')
 
 EMAIL_BACKEND: str
 if DEBUG:

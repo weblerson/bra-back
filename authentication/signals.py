@@ -13,7 +13,7 @@ from typing import Dict
 
 
 @receiver(post_save, sender=PremensUser, dispatch_uid='premens_user_identifier')
-def send_premens_email(sender, instance=None, created=None, **kwargs) -> None:
+def send_premens_email(sender, instance=PremensUser(), created=None, **kwargs) -> None:
     if created:
         subject: str = 'BRA - E-mail de Confirmação'
         token: str = sha256(('%s:%s' % (instance.get_full_name(), instance.email)).encode()).hexdigest()
@@ -35,6 +35,19 @@ def send_premens_email(sender, instance=None, created=None, **kwargs) -> None:
 
         Utils.send_email(
             settings.REGISTER_TEMPLATE_PATH,
+            subject,
+            [instance.email],
+            **context
+        )
+
+    else:
+        subject: str = 'BRA - E-mail de Alteração'
+        context: Dict[str, str] = {
+            'first_name': instance.first_name
+        }
+
+        Utils.send_email(
+            settings.UPDATE_TEMPLATE_PATH,
             subject,
             [instance.email],
             **context
