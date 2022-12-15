@@ -139,3 +139,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'authentication.PremensUser'
 
 AUTHENTICATION_BACKENDS = ('authentication.backends.CustomBackend',)
+
+# E-mails
+
+REGISTER_TEMPLATE_PATH: str = os.path.join(BASE_DIR, 'authentication/templates/emails/register.html')
+
+EMAIL_BACKEND: str
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST: str = config('EMAIL_HOST', cast=str)
+EMAIL_PORT: int = config('EMAIL_PORT', cast=int)
+EMAIL_HOST_USER: str = config('EMAIL_HOST_USER', cast=str)
+EMAIL_HOST_PASSWORD: str = config('EMAIL_HOST_PASSWORD', cast=str)
+EMAIL_USE_TLS: bool = True

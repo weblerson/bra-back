@@ -1,3 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpRequest
 
-# Create your views here.
+
+def confirm_register(request: HttpRequest):
+    ...
