@@ -66,3 +66,11 @@ class PremensUser(AbstractUser):
 
     def __str__(self) -> str:
         return '%s' % (self.get_full_name())
+
+
+class PremensActivation(models.Model):
+    user: PremensUser = models.ForeignKey(PremensUser, on_delete=models.CASCADE)
+    token: models.CharField = models.CharField(max_length=64, blank=False)
+
+    def __str__(self) -> str:
+        return "%s's token" % (self.user.get_full_name(),)

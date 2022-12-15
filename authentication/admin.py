@@ -1,7 +1,9 @@
 from django.contrib import admin
-from .models import PremensUser
+from .models import PremensUser, PremensActivation
 from .forms import UserCreationForm, UserChangeForm
 from django.contrib.auth import admin as model_admin
+
+from typing import Tuple, List
 
 
 @admin.register(PremensUser)
@@ -11,9 +13,20 @@ class PremensUserAdmin(model_admin.UserAdmin):
     add_form = UserCreationForm
     model = PremensUser
 
-    list_display = ("email", "first_name", "last_name", "is_staff")
+    list_display: Tuple[str, ...] = ("email", "first_name", "last_name", "is_staff")
 
-    fieldsets = model_admin.UserAdmin.fieldsets + (
+    fieldsets: Tuple = model_admin.UserAdmin.fieldsets + (
         ('Informações Residenciais', {'fields': ('cep',)}),
         ('Informações Pessoais Extras', {'fields': ('cpf',)})
     )
+
+
+@admin.register(PremensActivation)
+class PremensUserAdmin(admin.ModelAdmin):
+
+    fieldsets: Tuple = (
+        ('Informação Pessoal', {'fields': ('user',)}),
+        ('Token de Ativação', {'fields': ('token',)})
+    )
+
+    readonly_fields: List[str] = ['user', 'token']

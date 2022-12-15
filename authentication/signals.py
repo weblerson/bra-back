@@ -3,7 +3,7 @@ from django.dispatch import receiver
 
 from django.conf import settings
 
-from .models import PremensUser
+from .models import PremensUser, PremensActivation
 
 from utils import Utils
 from decouple import config
@@ -18,6 +18,15 @@ def send_premens_email(sender, instance=None, created=None, **kwargs) -> None:
         subject: str = 'BRA - E-mail de Confirmação'
         token: str = sha256(('%s:%s' % (instance.get_full_name(), instance.email)).encode()).hexdigest()
         confirmation_link: str = '%s/auth/confirm/%s' % (config('DOMAIN', cast=str), token)
+
+        try:
+            activation: PremensActivation = PremensActivation(user=instance, token=token)
+            activation.save()
+
+        except Exception as e:
+            print(f'error: {e}')
+
+            return
 
         context: Dict[str, str] = {
             'full_name': instance.get_full_name(),
