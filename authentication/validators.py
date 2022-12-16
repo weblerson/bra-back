@@ -1,7 +1,5 @@
 from django.core.exceptions import ValidationError
 
-import re
-
 
 def validate_digits(value: str) -> None:
     if not value.isdigit():
