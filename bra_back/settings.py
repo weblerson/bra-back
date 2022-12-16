@@ -156,3 +156,10 @@ EMAIL_PORT: int = config('EMAIL_PORT', cast=int)
 EMAIL_HOST_USER: str = config('EMAIL_HOST_USER', cast=str)
 EMAIL_HOST_PASSWORD: str = config('EMAIL_HOST_PASSWORD', cast=str)
 EMAIL_USE_TLS: bool = True
+
+# Celery
+
+CELERY_TIMEZONE: str = 'America/Manaus'
+CELERY_BROKER_URL: str = config('CELERY_BROKER_URL', cast=str)
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'

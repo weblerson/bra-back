@@ -5,9 +5,9 @@ from django.conf import settings
 
 from .models import PremensUser, PremensActivation
 
-from utils import Utils
 from decouple import config
 from hashlib import sha256
+from . import tasks
 
 from typing import Dict
 
@@ -33,7 +33,7 @@ def send_premens_email(sender, instance, created, **kwargs) -> None:
             'confirmation_link': confirmation_link
         }
 
-        Utils.send_email(
+        tasks.send_email_task.delay(
             settings.REGISTER_TEMPLATE_PATH,
             subject,
             [instance.email],
@@ -48,7 +48,7 @@ def send_premens_email(sender, instance, created, **kwargs) -> None:
             'first_name': instance.first_name
         }
 
-        Utils.send_email(
+        tasks.send_email_task.delay(
             settings.UPDATE_TEMPLATE_PATH,
             subject,
             [instance.email],
