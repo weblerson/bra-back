@@ -23,13 +23,6 @@ def register(request: HttpRequest, user: User):
                     'number, an uppercase letter, a lowercase letter and a symbol. '
         }
 
-    hash_pass = sha256(request.headers.get('BRAAuth').encode()).hexdigest()
-    if not hash_pass == config('BRAAuth', cast=str):
-        return {
-            'success': False,
-            'body': 'Senha de acesso incorreta!'
-        }
-
     form: PremensUserForm = PremensUserForm(user.dict())
     if not form.is_valid():
         errors = form.errors
