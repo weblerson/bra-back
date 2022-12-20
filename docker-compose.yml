@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  web:
+    build:
+      dockerfile: Dockerfile.dev
+    command: python3 manage.py runserver 0.0.0.0:8000
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    networks:
+      - django-network
+
+  db:
+    image: postgres:alpine
+    volumes:
+      - ./django-db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lerson"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - django-network
+
+  redis:
+    image: redis:alpine
+    networks:
+      - django-network
+
+  celery:
+    build:
+      dockerfile: Dockerfile.dev
+    restart: always
+    volumes:
+      - .:/app/
+    command: celery -A bra_back worker -l INFO
+    networks:
+      - django-network
+    depends_on:
+      - db
+      - redis
+
+networks:
+  django-network:
+    driver: bridge 

@@ -40,8 +40,6 @@ def send_premens_email(sender, instance, created, **kwargs) -> None:
             **context
         )
 
-        # print('created')
-
     else:
         subject: str = 'BRA - E-mail de Alteração'
         context: Dict[str, str] = {
@@ -54,5 +52,3 @@ def send_premens_email(sender, instance, created, **kwargs) -> None:
             [instance.email],
             **context
         )
-
-        # print('not created')

@@ -77,7 +77,7 @@ def register(request: HttpRequest, user: User):
                 is_staff=True
             )
 
-        premens_user.save()
+        # premens_user.save()
 
         return {
             'success': True,

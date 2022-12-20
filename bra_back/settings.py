@@ -88,10 +88,21 @@ if config('DB_PROD', cast=bool, default=False):
 else:
     db_options = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('POSTGRES_USER', cast=str),
+            'USER': config('POSTGRES_USER', cast=str),
+            'PASSWORD': config('POSTGRES_PASSWORD', cast=str),
+            'HOST': config('POSTGRES_HOST', cast=str),
+            'PORT': config('POSTGRES_PORT', cast=int)
         }
     }
+
+    # db_options = {
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.sqlite3',
+    #         'NAME': BASE_DIR / 'db.sqlite3'
+    #     }
+    # }
 
 DATABASES = db_options
 
