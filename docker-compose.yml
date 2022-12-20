@@ -2,8 +2,7 @@ version: '3'
 
 services:
   web:
-    build:
-      dockerfile: Dockerfile.dev
+    build: .
     command: python3 manage.py runserver 0.0.0.0:8000
     depends_on:
       db:
@@ -36,8 +35,7 @@ services:
       - django-network
 
   celery:
-    build:
-      dockerfile: Dockerfile.dev
+    build: .
     restart: always
     volumes:
       - .:/app/
