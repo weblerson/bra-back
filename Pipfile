@@ -1,0 +1,24 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+celery = "==5.2.7"
+django = "==4.1.4"
+django-ninja = "==0.19.1"
+python-decouple = "==3.6"
+redis = "==4.4.0"
+psycopg2-binary = "*"
+
+[dev-packages]
+ipdb = "*"
+blue = "*"
+isort = "*"
+pytest = "*"
+model-bakery = "*"
+coverage = "*"
+pytest-django = "*"
+
+[requires]
+python_version = "3.10"
