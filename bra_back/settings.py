@@ -10,11 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-from pathlib import Path
-from decouple import config
-
 import os
 import sys
+from pathlib import Path
+
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -94,7 +94,7 @@ else:
             'USER': config('POSTGRES_USER', cast=str),
             'PASSWORD': config('POSTGRES_PASSWORD', cast=str),
             'HOST': config('POSTGRES_HOST', cast=str),
-            'PORT': config('POSTGRES_PORT', cast=int)
+            'PORT': config('POSTGRES_PORT', cast=int),
         }
     }
 
@@ -148,8 +148,12 @@ AUTHENTICATION_BACKENDS = ('authentication.backends.CustomBackend',)
 
 # E-mails
 
-REGISTER_TEMPLATE_PATH: str = os.path.join(BASE_DIR, 'apps/authentication/templates/emails/register.html')
-UPDATE_TEMPLATE_PATH: str = os.path.join(BASE_DIR, 'apps/authentication/templates/emails/update.html')
+REGISTER_TEMPLATE_PATH: str = os.path.join(
+    BASE_DIR, 'apps/authentication/templates/emails/register.html'
+)
+UPDATE_TEMPLATE_PATH: str = os.path.join(
+    BASE_DIR, 'apps/authentication/templates/emails/update.html'
+)
 
 EMAIL_BACKEND: str
 if DEBUG:

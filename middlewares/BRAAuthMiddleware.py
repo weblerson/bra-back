@@ -1,10 +1,10 @@
-from django.http import HttpResponseForbidden
 from hashlib import sha256
+
 from decouple import config
+from django.http import HttpResponseForbidden
 
 
 class BRAAuthMiddleware:
-
     def __init__(self, get_response):
         self._get_response = get_response
         self._hash_pass = config('BRAAuth', cast=str)

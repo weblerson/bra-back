@@ -1,11 +1,16 @@
-from celery import shared_task
 from typing import List
+
+from celery import shared_task
 
 from utils import Utils
 
 
-@shared_task(name='send_email', bind=True, max_retries=5, default_retry_delay=2)
-def send_email_task(self, template_path: str, subject: str, to: List[str], **kwargs) -> bool:
+@shared_task(
+    name='send_email', bind=True, max_retries=5, default_retry_delay=2
+)
+def send_email_task(
+    self, template_path: str, subject: str, to: List[str], **kwargs
+) -> bool:
     try:
         Utils.send_email(template_path, subject, to, **kwargs)
 
