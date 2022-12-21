@@ -4,12 +4,12 @@ from decouple import config
 from hashlib import sha256
 
 from ninja import Router
-from .schemas import User
+from authentication.schemas import User
 
 from utils import Utils
 
-from .models import PremensUser
-from .forms import PremensUserForm
+from authentication.models import PremensUser
+from authentication.forms import PremensUserForm
 
 auth_router: Router = Router()
 
