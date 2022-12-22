@@ -3,12 +3,9 @@ from django.db.models import Q
 
 
 class CustomBackend(ModelBackend):
-
     def authenticate(self, request, username=None, password=None, **kwargs):
         try:
-            user = UserModel.objects.filter(
-                Q(email__iexact=username)
-            )
+            user = UserModel.objects.filter(Q(email__iexact=username))
 
         except UserModel.DoesNotExist:
             return None

@@ -1,12 +1,15 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager as BaseUserManager
+from django.db import models
 
-from .validators import validate_digits, validate_cpf_length, validate_cep_length
+from .validators import (
+    validate_cep_length,
+    validate_cpf_length,
+    validate_digits,
+)
 
 
 class UserManager(BaseUserManager):
-
     def _create_user(self, email, password, **extra_fields):
         email = self.normalize_email(email)
 
@@ -23,14 +26,14 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
     def create_superuser(self, email=None, password=None, **extra_fields):
-        extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
 
-        if extra_fields.get("is_staff") is not True:
-            raise ValueError("Superuser must have is_staff=True.")
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
 
-        if extra_fields.get("is_superuser") is not True:
-            raise ValueError("Superuser must have is_superuser=True.")
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
 
         return self._create_user(email, password, **extra_fields)
 
@@ -43,17 +46,13 @@ class PremensUser(AbstractUser):
     cep = models.CharField(
         max_length=8,
         blank=False,
-        validators=[
-            validate_digits,
-            validate_cep_length
-        ])
+        validators=[validate_digits, validate_cep_length],
+    )
     cpf = models.CharField(
         max_length=11,
         unique=True,
-        validators=[
-            validate_digits,
-            validate_cpf_length
-        ])
+        validators=[validate_digits, validate_cpf_length],
+    )
 
     USERNAME_FIELD: str = 'email'
     EMAIL_FIELD: str = 'email'

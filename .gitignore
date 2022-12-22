@@ -1,6 +1,7 @@
 __pycache__/*
 Dockerfile.dev
 docker-compose.dev.yml
+.devcontainer/*
 django-db/*
 .idea/*
 
