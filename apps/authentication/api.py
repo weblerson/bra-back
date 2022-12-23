@@ -1,11 +1,12 @@
-from hashlib import sha256
-
 from authentication.forms import PremensUserForm
 from authentication.models import PremensUser
-from authentication.schemas import User
+from authentication.schemas import Token
 from decouple import config
 from django.http import HttpRequest
 from ninja import Router
+
+import jwt
+from entities import User
 
 from utils import Utils
 
@@ -13,7 +14,10 @@ auth_router: Router = Router()
 
 
 @auth_router.post('')
-def register(request: HttpRequest, user: User):
+def register(request: HttpRequest, token: Token):
+    payload = jwt.decode(token.token, config('BRAAuth', cast=str), algorithms=['HS256'])
+    user: User = Utils.generate_user(payload)
+
     if not Utils.validate_password(user.password):
         return {
             'success': False,
@@ -64,8 +68,6 @@ def register(request: HttpRequest, user: User):
                 is_active=False,
                 is_staff=True,
             )
-
-        # premens_user.save()
 
         return {'success': True, 'body': 'Usuário cadastrado com sucesso!'}
 

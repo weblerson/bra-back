@@ -6,6 +6,8 @@ from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
+from entities import User
+
 
 class Utils:
     @staticmethod
@@ -38,3 +40,17 @@ class Utils:
             return False
 
         return True
+
+    @staticmethod
+    def generate_password():
+        import random
+        import string
+
+
+        characters = '%s%s%s' % (string.ascii_letters, string.digits, string.punctuation)
+
+        return ''.join(random.choices(characters))
+
+    @staticmethod
+    def generate_user(payload):
+        return User().from_json(payload.update({'password': Utils.generate_password()}))
