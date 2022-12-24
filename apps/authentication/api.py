@@ -21,11 +21,11 @@ def register(request: HttpRequest, token: Token):
     if not Utils.validate_password(user.password):
         return {
             'success': False,
-            'body': 'Enter a strong password! A strong password is made up of 8 digits and must contain at least 1 '
+            'body': 'A strong password is made up of 8 digits and must contain at least 1 '
             'number, an uppercase letter, a lowercase letter and a symbol. ',
         }
 
-    form: PremensUserForm = PremensUserForm(user.dict())
+    form: PremensUserForm = PremensUserForm(user.to_json())
     if not form.is_valid():
         errors = form.errors
 

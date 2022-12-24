@@ -17,3 +17,14 @@ class User:
         self.email: str = json.get('email')
         self.password: str = json.get('password')
         self.staff: bool = json.get('staff')
+
+    def to_json(self):
+        return {
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'cpf': self.cpf,
+            'cep': self.cep,
+            'email': self.email,
+            'password': self.password,
+            'staff': self.staff
+        }

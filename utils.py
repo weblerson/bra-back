@@ -46,11 +46,18 @@ class Utils:
         import random
         import string
 
+        
+        characters = '%s%s%s' % (string.ascii_letters, string.digits, '!@#$%<^&*?')
 
-        characters = '%s%s%s' % (string.ascii_letters, string.digits, string.punctuation)
-
-        return ''.join(random.choices(characters))
+        return ''.join(random.choices(characters, k=24))
 
     @staticmethod
     def generate_user(payload):
-        return User().from_json(payload.update({'password': Utils.generate_password()}))
+        json = payload
+        json.update({'password': Utils.generate_password()})
+
+        user: User = User()
+        user.from_json(json)
+     
+        return user
+
