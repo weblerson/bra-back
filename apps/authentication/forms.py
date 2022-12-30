@@ -86,4 +86,24 @@ class CreatePasswordForm(django_forms.Form):
             })
 
         return self.cleaned_data
+
+
+class CEPForm(django_forms.Form):
+    cep = django_forms.CharField(max_length=8)
+
+    def clean(self):
+        super(CEPForm, self).clean()
+
+        cep = self.cleaned_data.get('cep').strip()
+        if not cep:
+            self._errors.update({
+                'cep': 'O CEP não pode estar vazio.'
+            })
+
+        if len(cep) != 8:
+            self._errors.update({
+                'cep': 'O CEP precisa ter 8 dígitos!'
+            })
+
+        return self.cleaned_data
     

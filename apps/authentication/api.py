@@ -1,8 +1,9 @@
-from authentication.forms import PremensUserForm
+from authentication.forms import PremensUserForm, CEPForm
 from authentication.models import PremensUser
-from authentication.schemas import Token
+from authentication.schemas import Token, CEP
 from decouple import config
 from django.http import HttpRequest
+from django.shortcuts import get_object_or_404
 from ninja import Router
 
 import jwt
@@ -11,6 +12,37 @@ from entities import User
 from utils import Utils
 
 auth_router: Router = Router()
+
+
+
+@auth_router.patch('')
+def change_cep(request: HttpRequest, cep: CEP):
+    payload = jwt.decode(cep.token, config('BRAAuth', cast=str), algorithms=['HS256'])
+    user = get_object_or_404(PremensUser, id=payload.get('id'))
+
+    form: CEPForm = CEPForm({'cep': payload.get('cep')})
+    if not form.is_valid():
+        return {
+            'success': False,
+            'body': form.errors
+        }
+
+    try:
+        user.cep = payload.get('cep')
+        user.save()
+
+        return {
+            'success': True,
+            'body': 'CEP alterado com sucesso. Aguarde um e-mail confirmando a alteração.'
+        }
+
+    except Exception as e:
+        print(e)
+
+        return {
+            'success': False,
+            'body': e
+        }
 
 
 @auth_router.post('')
