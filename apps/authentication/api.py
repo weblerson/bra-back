@@ -14,6 +14,33 @@ from utils import Utils
 auth_router: Router = Router()
 
 
+@auth_router.get('')
+def get_customers(request: HttpRequest):
+    try:
+        users = PremensUser.objects.filter(is_active=True, is_staff=False).order_by('date_joined')
+
+        def generate_customer_dict(user: PremensUser):
+            return {
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'cpf': user.cpf,
+                'cep': user.cep,
+                'email': user.email,
+            }
+
+        return {
+            'success': True,
+            'body': list(generate_customer_dict(user) for user in users)
+        }
+
+    except Exception as e:
+        print(e)
+
+        return {
+            'success': False,
+            'body': e
+        }
+
 
 @auth_router.patch('')
 def change_cep(request: HttpRequest, cep: CEP):

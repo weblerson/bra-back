@@ -13,14 +13,26 @@ class BRAAuthMiddleware:
 
     def __call__(self, request:  HttpRequest):
         if request.path in self._path:
-            try:
-                body = request.body.decode()
-                token = json.loads(body).get('token')
+            match request.method:
+                case 'POST' | 'PATCH':
+                    try:
+                        body = request.body.decode()
+                        token = json.loads(body).get('token')
 
-                jwt.decode(token, config('BRAAuth', cast=str), algorithms=['HS256'])
+                        jwt.decode(token, config('BRAAuth', cast=str), algorithms=['HS256'])
 
-            except Exception as e:
-                return HttpResponseForbidden(e)
+                    except Exception as e:
+                        return HttpResponseForbidden(e)
+
+                case 'GET':
+                    try:
+                        headers = request.headers
+                        token = headers.get('BRAAuth')
+
+                        jwt.decode(token, config('BRAAuth', cast=str), algorithms=['HS256'])
+
+                    except Exception as e:
+                        return HttpResponseForbidden(e)
 
         response = self._get_response(request)
 
