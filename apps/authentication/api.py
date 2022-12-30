@@ -20,6 +20,18 @@ def change_cep(request: HttpRequest, cep: CEP):
     payload = jwt.decode(cep.token, config('BRAAuth', cast=str), algorithms=['HS256'])
     user = get_object_or_404(PremensUser, id=payload.get('id'))
 
+    if not user.is_active:
+        return {
+            'success': False,
+            'body': "O usuário não ativou a conta. Impossível realizar a alteração."
+        }
+
+    if payload.get('cep') == user.cep:
+        return {
+            'success': False,
+            'body': 'O CEP informado é igual ao CEP registrado. Impossível realizar a alteração.'
+        }
+
     form: CEPForm = CEPForm({'cep': payload.get('cep')})
     if not form.is_valid():
         return {

@@ -16,6 +16,7 @@ class PremensUserAdmin(model_admin.UserAdmin):
 
     list_display: Tuple[str, ...] = (
         'email',
+        'id',
         'first_name',
         'last_name',
         'is_staff',
