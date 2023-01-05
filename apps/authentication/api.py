@@ -15,7 +15,7 @@ auth_router: Router = Router()
 
 
 @auth_router.get('')
-def get_customers(request: HttpRequest):
+def get_customers(request: HttpRequest) -> dict[str, str | bool | list[dict[str, str]]]:
     try:
         users = PremensUser.objects.filter(is_active=True, is_staff=False).order_by('date_joined')
 
@@ -38,12 +38,12 @@ def get_customers(request: HttpRequest):
 
         return {
             'success': False,
-            'body': e
+            'body': str(e)
         }
 
 
 @auth_router.patch('')
-def change_cep(request: HttpRequest, cep: CEP):
+def change_cep(request: HttpRequest, cep: CEP) -> dict[str, str | bool | dict[str, list[str]]]:
     payload = jwt.decode(cep.token, config('BRAAuth', cast=str), algorithms=['HS256'])
     user = get_object_or_404(PremensUser, id=payload.get('id'))
 
@@ -80,12 +80,12 @@ def change_cep(request: HttpRequest, cep: CEP):
 
         return {
             'success': False,
-            'body': e
+            'body': str(e)
         }
 
 
 @auth_router.post('')
-def register(request: HttpRequest, token: Token):
+def register(request: HttpRequest, token: Token) -> dict[str, str | bool | dict[str, list[str]]]:
     payload = jwt.decode(token.token, config('BRAAuth', cast=str), algorithms=['HS256'])
     user: User = Utils.generate_user(payload)
 
@@ -143,4 +143,4 @@ def register(request: HttpRequest, token: Token):
         return {'success': True, 'body': 'Usuário cadastrado com sucesso!'}
 
     except Exception as e:
-        return {'success': False, 'body': e}
+        return {'success': False, 'body': str(e)}
