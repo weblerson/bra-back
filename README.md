@@ -227,3 +227,7 @@ No caso de acontecer algum erro, assim como nos exemplos anteriores, teremos no 
 ```
 
 Diferente das outras respostas, essa não tem a possibilidade de retornar uma lista de erros por não ter um corpo na requisição.
+
+### E se eu informar um token JWT inválido?
+
+Se você informar um token JWT inválido, você receberá como resposta um status HTTP 403 (Forbidden) retornada pelo Middleware, sendo impossível a requisição chegar ao destino.
