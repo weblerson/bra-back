@@ -232,9 +232,10 @@ Diferente das outras respostas, essa não tem a possibilidade de retornar uma li
 
 Se você informar um token JWT inválido, você receberá como resposta um status HTTP 403 (Forbidden) retornada pelo Middleware, sendo impossível a requisição chegar ao destino.
 
-## ToDo
+## To-Do
 
 - Adicionar a chave ID no retorno da requisição GET
+- Adicionar quantidade de produtos comprados na model de cliente
 - Criar o app de banco de dados em tempo real
 - Implementar os WebSockets para fornecer os dados ao cliente assim que esses forem alterados (Design Pattern Observer)
 - Colocar o projeto em produção
