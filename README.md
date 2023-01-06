@@ -84,8 +84,8 @@ Caso tenha mais de um erro, teremos como resposta na chave "body" um map com a c
 {
     "success": false,
     "body": {
-        "cpf": ["O CPF não pode conter menos de 11 dígitos."],
-        "cep": ["O CEP não pode conter menos de 8 dígitos."]
+        "cpf": ["Erro 1 no campo CPF."],
+        "cep": ["Erro 1 no campo CEP."]
     }
 }
 ```
@@ -95,3 +95,79 @@ Caso tudo ocorra bem e a requisição tenha sucesso, você vai receber um link n
 ![Página de criação de senha](./src/create_password.png)
 
 ![Página de confirmação de conta](./src/account_confirmed.png)
+
+### Alteração de CEP
+##### Endpoint: /api/v1/users
+##### Método: PATCH
+##### Body: Token JWT
+
+Para alterar o CEP de um cliente, é necessário enviar no corpo da requisição um token JWT contendo o ID daquele cliente juntamente com o novo CEP.
+
+```json
+{
+    "token": "token_jwt"
+}
+```
+
+Dando o exemplo na linguagem Java 17, temos:
+
+```java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class PremensHttpRequest {
+
+    public static void createUser(String token) {
+        HttpClient client = HttpClient.newHttpClient().build();
+        URI uri = URI.create("https://www.example.com/api/v1/users");
+
+        HttpRequest request = HttpRequest.newBuilder()
+            .method("PATCH", BodyPublishers.ofString(String.format("{\"token\": \"%s\"}", token)))
+            .uri(uri)
+            .headers("Accept", "application/json", "Content-Type", "application/json")
+            .build();
+
+        HttpResponse response = httpClient.send(request, BodyHandlers.ofString());
+
+        System.out.println(response.body());
+    }
+}
+```
+
+Assim, caso haja sucesso, é esperado como resposta o seguinte JSON:
+
+```json
+{
+    "success": true,
+    "body": "CEP alterado com sucesso. Aguarde um e-mail confirmando a alteração."
+}
+```
+
+Caso a resposta seja essa, um e-mail vai ser enviado ao usuário confirmando a alteração.
+
+Agora, se ocorrer algum problema, assim como no exemplo acima da criação, vai ser enviada uma resposta contendo o erro, como os exemplos a seguir.
+
+```json
+{
+    "success": false,
+    "body": "mensagem_de_erro"
+}
+```
+
+Caso tenha mais de um erro:
+
+```json
+{
+    "success": false,
+    "body": {
+        "cep": ["Erro 1 no campo CEP.", "Erro 2 no campo CEP."]
+    }
+}
+```
+
+### Resgate de Usuários
+##### Endpoint: /api/v1/users
+##### Método: GET
+
