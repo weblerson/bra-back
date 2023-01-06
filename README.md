@@ -171,3 +171,59 @@ Caso tenha mais de um erro:
 ##### Endpoint: /api/v1/users
 ##### Método: GET
 
+Para resgatar os clientes registrados no banco de dados, é necessário enviar uma requisição GET com um header de chave BRAAuth contendo o token JWT para validação.
+
+Como exemplo, temos:
+
+```java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class PremensHttpRequest {
+
+    public static void createUser(String token) {
+        HttpClient client = HttpClient.newHttpClient().build();
+        URI uri = URI.create("https://www.example.com/api/v1/users");
+
+        HttpRequest request = HttpRequest.newBuilder()
+            .GET()
+            .uri(uri)
+            .headers("Accept", "application/json", "Content-Type", "application/json", "BRAAuth", "token_jwt")
+            .build();
+
+        HttpResponse response = httpClient.send(request, BodyHandlers.ofString());
+
+        System.out.println(response.body());
+    }
+}
+```
+
+No caso de sucesso, teremos uma resposta contendo uma lista de dicionários com  as informações de cada cliente como o exemplo a seguir:
+
+```json
+{
+    "success": true,
+    "body": [
+        {
+            "first_name": "Fulano",
+            "last_name": "Tal",
+            "cpf": 00000000000,
+            "cep": 00000000,
+            "email": "fulano@mail.com"
+        },
+    ]
+}
+```
+
+No caso de acontecer algum erro, assim como nos exemplos anteriores, teremos no corpo da resposta a mensagem de erro:
+
+```json
+{
+    "success": false,
+    "body": "mensagem_de_erro"
+}
+```
+
+Diferente das outras respostas, essa não tem a possibilidade de retornar uma lista de erros por não ter um corpo na requisição.
